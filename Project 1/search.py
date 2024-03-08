@@ -87,6 +87,20 @@ def depthFirstSearch(problem: SearchProblem):
     print("Start's successors:", problem.getSuccessors(problem.getStartState()))
     """
     "*** YOUR CODE HERE ***"
+    # initialize the frontier using the initial state of the problem
+    frontier = util.Stack
+    frontier.push([problem.getStartState, []])
+    # initialize the explored set to be empty
+    explored = set()
+    # loop
+    while(True):
+        if frontier.isEmpty():
+            return "failure"
+        # choose a leaf node and remove it from the frontier
+        leaf_node = frontier.pop()
+        # if leaf node is in explored set then continue    
+        
+        
     util.raiseNotDefined()
 
 def breadthFirstSearch(problem: SearchProblem):
