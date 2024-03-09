@@ -87,31 +87,99 @@ def depthFirstSearch(problem: SearchProblem):
     print("Start's successors:", problem.getSuccessors(problem.getStartState()))
     """
     "*** YOUR CODE HERE ***"
-    # initialize the frontier using the initial state of the problem
-    frontier = util.Stack
-    frontier.push([problem.getStartState, []])
+    # initializez the frontier using the initial state of the problem
+    frontier = util.Stack()
+    frontier.push((problem.getStartState(), []))
     # initialize the explored set to be empty
     explored = set()
-    # loop
-    while(True):
+
+    while True:
         if frontier.isEmpty():
             return "failure"
         # choose a leaf node and remove it from the frontier
-        leaf_node = frontier.pop()
-        # if leaf node is in explored set then continue    
-        
-        
-    util.raiseNotDefined()
+        node = frontier.pop()
+        state = node[0]
+        path = node[1]
+        # if the node is in the explored set continue
+        if state in explored:
+            continue
+        # if the node contains a goal state then return the corresponding solution
+        if problem.isGoalState(state):
+            return path
+        # add the node to the explored set
+        explored.add(state)
+        # expand the chosen node, adding the resulting nodes to the frontier
+        resultingNodes = problem.getSuccessors(state) # returns (nextState, action, cost)
+        for nextState, action, cost in resultingNodes: 
+            # only if not in the explored set
+            if nextState not in explored:
+                actions = path + [action]
+                frontier.push((nextState, actions))
+    
 
 def breadthFirstSearch(problem: SearchProblem):
     """Search the shallowest nodes in the search tree first."""
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    # initializez the frontier using the initial state of the problem
+    frontier = util.Queue() # only difference from DFS
+    frontier.push((problem.getStartState(), []))
+    # initialize the explored set to be empty
+    explored = set()
+
+    while True:
+        if frontier.isEmpty():
+            return "failure"
+        # choose a leaf node and remove it from the frontier
+        node = frontier.pop()
+        state = node[0]
+        path = node[1]
+        # if the node is in the explored set continue
+        if state in explored:
+            continue
+        # if the node contains a goal state then return the corresponding solution
+        if problem.isGoalState(state):
+            return path
+        # add the node to the explored set
+        explored.add(state)
+        # expand the chosen node, adding the resulting nodes to the frontier
+        resultingNodes = problem.getSuccessors(state) # returns (nextState, action, cost)
+        for nextState, action, cost in resultingNodes: 
+            # only if not in the explored set
+            if nextState not in explored:
+                actions = path + [action]
+                frontier.push((nextState, actions))
 
 def uniformCostSearch(problem: SearchProblem):
     """Search the node of least total cost first."""
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    # initializez the frontier using the initial state of the problem
+    frontier = util.PriorityQueue() # based on cumulative cost
+    frontier.push((problem.getStartState(), []), 0) # cumulative cost added
+    # initialize the explored set to be empty
+    explored = set()
+
+    while True:
+        if frontier.isEmpty():
+            return "failure"
+        # choose a leaf node and remove it from the frontier
+        node = frontier.pop()
+        state = node[0]
+        path = node[1]
+        # if the node is in the explored set continue
+        if state in explored:
+            continue
+        # if the node contains a goal state then return the corresponding solution
+        if problem.isGoalState(state):
+            return path
+        # add the node to the explored set
+        explored.add(state)
+        # expand the chosen node, adding the resulting nodes to the frontier
+        resultingNodes = problem.getSuccessors(state)
+        for nextState, action, cost in resultingNodes: 
+            # only if not in the explored set
+            if nextState not in explored:
+                actions = path + [action]
+                frontier.push((nextState, actions), problem.getCostOfActions(actions))
 
 def nullHeuristic(state, problem=None):
     """
@@ -123,7 +191,35 @@ def nullHeuristic(state, problem=None):
 def aStarSearch(problem: SearchProblem, heuristic=nullHeuristic):
     """Search the node that has the lowest combined cost and heuristic first."""
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    # initializez the frontier using the initial state of the problem
+    frontier = util.PriorityQueue() # based on cumulative cost + heuristic
+    frontier.push((problem.getStartState(), []), 0)
+    # initialize the explored set to be empty
+    explored = set()
+
+    while True:
+        if frontier.isEmpty():
+            return "failure"
+        # choose a leaf node and remove it from the frontier
+        node = frontier.pop()
+        state = node[0]
+        path = node[1]
+        # if the node is in the explored set continue
+        if state in explored:
+            continue
+        # if the node contains a goal state then return the corresponding solution
+        if problem.isGoalState(state):
+            return path
+        # add the node to the explored set
+        explored.add(state)
+        # expand the chosen node, adding the resulting nodes to the frontier
+        resultingNodes = problem.getSuccessors(state)
+        for nextState, action, cost in resultingNodes: 
+            # only if not in the explored set
+            if nextState not in explored:
+                actions = path + [action]
+                cumulativeCost = problem.getCostOfActions(actions) + heuristic(nextState, problem) # cumulative cost + heuristic
+                frontier.push((nextState, actions), cumulativeCost)
 
 
 # Abbreviations
