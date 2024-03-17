@@ -487,15 +487,17 @@ def foodHeuristic(state: Tuple[Tuple, List[List]], problem: FoodSearchProblem):
     """
     position, foodGrid = state
     "*** YOUR CODE HERE ***"
-   
-    # find furthest food using mazeDistance
-    furthest = 0
-    foodList = foodGrid.asList()
-    for i in range(0,len(foodList)):
-        dist = mazeDistance(position,foodList[i],problem.startingGameState)
-        if dist > furthest: furthest = dist
 
-    return furthest
+    distances = []
+    foodList = foodGrid.asList()
+    for i in range(len(foodList)):
+        distance = mazeDistance(position,foodList[i],problem.startingGameState)
+        distances.append(distance)
+    if not distances: 
+        return 0 
+    else: 
+        return max(distances)
+
 
     
 
